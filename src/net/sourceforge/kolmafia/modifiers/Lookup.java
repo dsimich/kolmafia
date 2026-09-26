@@ -15,12 +15,12 @@ public class Lookup {
 
   public Lookup(ModifierType type, IntOrString key) {
     this.type = type;
-    this.key = type == ModifierType.BASE ? new IntOrString("Base") : key;
+    this.key = key;
   }
 
   public Lookup(ModifierType type, int key) {
     this.type = type;
-    this.key = type == ModifierType.BASE ? new IntOrString("Base") : new IntOrString(key);
+    this.key = new IntOrString(key);
   }
 
   public Lookup(ModifierType type, String name) {
@@ -30,7 +30,11 @@ public class Lookup {
           case ITEM, ETERNITY_CODPIECE -> new IntOrString(ItemDatabase.getExactItemId(name));
           case EFFECT -> new IntOrString(EffectDatabase.getEffectId(name, true));
           case SKILL -> new IntOrString(SkillDatabase.getSkillId(name, true));
-          case BASE -> new IntOrString("Base");
+          case BASE ->
+              new IntOrString(
+                  name.equalsIgnoreCase("Rollover")
+                      ? "Rollover"
+                      : name.equalsIgnoreCase("Base") ? "Base" : name);
           default -> new IntOrString(name);
         };
     if (EnumSet.of(
